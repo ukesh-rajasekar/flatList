@@ -27,7 +27,7 @@ const MyList = () => {
             <Text style={tw`pb-5 text-2xl font-medium text-slate-400`}>
                {message}
             </Text>
-            <Text style={tw`pb-4 text-md font-medium text-slate-400`}>
+            <Text style={tw`pb-4 text-base font-medium text-slate-400`}>
                {instruction}
             </Text>
          </View>

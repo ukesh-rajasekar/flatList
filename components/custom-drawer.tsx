@@ -14,7 +14,7 @@ const CustomDrawer = (props) => {
             {...props}
             contentContainerStyle={tw`flex-1 bg-slate-800`}
          >
-            <View style={tw`flex flex-column items-center justify-center p-6`}>
+            <View style={tw`flex items-center justify-center p-6`}>
                <Image
                   source={require('../assets/images/user-profile.jpg')}
                   style={tw`h-30 w-30 rounded-full mb-3 mt-5`}
@@ -37,34 +37,15 @@ const CustomDrawer = (props) => {
                onPress={() => {}}
                style={{ paddingVertical: 15 }}
             >
-               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+               <View style={tw`flex-row items-center`}>
                   <Ionicons name='share-social-outline' size={22} />
-                  <Text
-                     style={{
-                        fontSize: 15,
-                        fontFamily: 'Roboto-Medium',
-                        marginLeft: 5,
-                     }}
-                  >
-                     Tell a Friend
-                  </Text>
+                  <Text style={tw`ml-4 text-base`}>Tell a Friend</Text>
                </View>
             </TouchableOpacity>
-            <TouchableOpacity
-               onPress={() => {}}
-               style={{ paddingVertical: 15 }}
-            >
-               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <TouchableOpacity onPress={() => {}} style={tw`py-5`}>
+               <View style={tw`flex-row items-center`}>
                   <Ionicons name='exit-outline' size={22} />
-                  <Text
-                     style={{
-                        fontSize: 15,
-                        fontFamily: 'Roboto-Medium',
-                        marginLeft: 5,
-                     }}
-                  >
-                     Sign Out
-                  </Text>
+                  <Text style={tw`ml-4 text-base`}>Sign Out</Text>
                </View>
             </TouchableOpacity>
          </View>

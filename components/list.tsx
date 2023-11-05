@@ -28,9 +28,9 @@ const Item = ({ idx, item }: { idx: number; item: string }) => {
 
 const List = () => {
    const [input, setInput] = useState<string | null>(null);
-   const [items, setitems] = useState<string[]>(['one', 'two', 'three']);
+   const [name, setname] = useState<string>('list name...');
 
-   const name = 'shopping';
+   const [items, setitems] = useState<string[]>(['one', 'two', 'three']);
 
    const onAdd = () => {
       Keyboard.dismiss();
@@ -42,7 +42,13 @@ const List = () => {
    return (
       <View style={tw`flex-1 bg-slate-800`}>
          <View style={tw`pt-20 px-10`}>
-            <Text style={tw`text-2xl font-medium text-slate-400`}>{name}</Text>
+            <TextInput
+               style={tw`pl-1 py-2 text-2xl font-medium text-slate-400`}
+               placeholder='list name...'
+               placeholderTextColor={'white'}
+               value={name}
+               onChangeText={(value) => setname(value)}
+            />
             <KeyboardAvoidingView
                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                style={tw`py-4 flex-row items-center justify-around w-full`}
@@ -56,7 +62,7 @@ const List = () => {
                />
                <TouchableOpacity
                   onPress={onAdd}
-                  style={tw`mx-4 w-10 h-10 bg-white rounded-md justify-center items-center border-white border-2`}
+                  style={tw`ml-4 w-10 h-10 bg-white rounded-md justify-center items-center border-white border-2`}
                >
                   <Text style={tw`text-xl`}>+</Text>
                </TouchableOpacity>
