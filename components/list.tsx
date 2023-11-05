@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 import tw from 'twrnc';
-import { SwipeRow } from 'react-native-swipe-list-view';
 
 const Item = ({ idx, item }: { idx: number; item: string }) => {
    return (
