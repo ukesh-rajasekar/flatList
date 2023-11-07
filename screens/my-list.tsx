@@ -11,8 +11,9 @@ import tw from 'twrnc';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { HomeStackParams } from '../types/navigation-stacks';
 import { getTodos } from '../utils/http-functions';
-import { List } from '../components/list-component';
+import { HiddenList, List } from '../components/list-component';
 import { Lists } from '../types/lists';
+import { SwipeListView } from 'react-native-swipe-list-view';
 
 const MyList = () => {
    const [lists, setlists] = useState<Lists[] | []>([]);
@@ -36,6 +37,7 @@ const MyList = () => {
       }
    };
 
+   const onDelete = () => {};
    useEffect(() => {
       fetchTodos();
    }, []);
@@ -53,7 +55,7 @@ const MyList = () => {
             </View>
          ) : (
             <View style={tw`pt-10 px-5`}>
-               <FlatList
+               <SwipeListView
                   data={lists}
                   renderItem={({ item }) => (
                      <List
@@ -66,7 +68,11 @@ const MyList = () => {
                         idx={item._id}
                      />
                   )}
-                  keyExtractor={(item) => item._id}
+                  renderHiddenItem={({ item }) => (
+                     <HiddenList todoListId={item._id} onDelete={onDelete} />
+                  )}
+                  leftOpenValue={75}
+                  rightOpenValue={-75}
                />
             </View>
          )}

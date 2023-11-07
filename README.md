@@ -6,9 +6,9 @@ A list/notes react native app which you can share with your friends and family (
 
 -  [x] ~Build basic UI~
 -  [x] ~Build routing and drawer~
--  Add basic list features~
+-  [x] ~Add basic list features~
 -  Build backend with mongo~
--  integrate app with backend~
+-  [x] ~integrate app with backend~
 -  Add authentication~
 -  Trash page~
 -  Add Friend - requests~

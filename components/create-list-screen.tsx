@@ -1,4 +1,8 @@
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import {
+   NavigationProp,
+   StackActions,
+   useNavigation,
+} from '@react-navigation/native';
 import React, { useState } from 'react';
 import { Alert, Keyboard, Text, TextInput, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -28,9 +32,11 @@ const CreateListScreen = () => {
          setTimeout(() => {
             setloading(false);
             if (result.name) {
-               navigation.navigate('newlist', {
-                  name,
-               });
+               navigation.dispatch(
+                  StackActions.replace('newlist', {
+                     listDetail: result,
+                  })
+               );
             }
          }, 2000);
       }

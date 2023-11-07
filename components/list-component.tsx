@@ -1,12 +1,32 @@
-import { View, Text } from 'react-native';
+import { View, Text, TouchableHighlight } from 'react-native';
 import tw from 'twrnc';
 import { Lists } from '../types/lists';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import React from 'react';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 type ListProps = {
    idx: string;
    item: Lists;
    goToList: () => void;
+};
+
+export const HiddenList = ({
+   todoListId,
+   onDelete,
+}: {
+   todoListId: string;
+   onDelete: (todoListId) => void;
+}) => {
+   return (
+      <TouchableHighlight
+         style={tw`my-4 pt-2 px-1 flex-row items-center justify-end`}
+      >
+         <TouchableOpacity onPress={() => onDelete(todoListId)}>
+            <Icon name='delete' size={30} color={'#b84d25'} />
+         </TouchableOpacity>
+      </TouchableHighlight>
+   );
 };
 
 export const List = ({ idx, item, goToList }: ListProps) => {

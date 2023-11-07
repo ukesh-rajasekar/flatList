@@ -111,13 +111,6 @@ const List = ({ route }: Item) => {
                   leftOpenValue={75}
                   rightOpenValue={-75}
                />
-               {/* <FlatList
-                  data={items}
-                  renderItem={({ item, index }) => (
-                     <Item item={item} itemId={item._id} todoListId={_id} />
-                  )}
-                  keyExtractor={(item) => item.name}
-               /> */}
             </>
          </View>
       </View>
