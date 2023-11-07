@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import {
-   FlatList,
    Keyboard,
    KeyboardAvoidingView,
    Platform,
@@ -9,10 +8,15 @@ import {
    TouchableOpacity,
    View,
 } from 'react-native';
+import { SwipeListView } from 'react-native-swipe-list-view';
 import tw from 'twrnc';
 import { Item as ItemProp, Lists } from '../types/lists';
-import { getListById, updateTodo } from '../utils/http-functions';
-import { Item } from './items-component';
+import {
+   deleteCompletedItem,
+   getListById,
+   updateTodo,
+} from '../utils/http-functions';
+import { HiddenItem, Item } from './items-component';
 
 type Item = {
    route: {
@@ -25,7 +29,7 @@ type Item = {
 const List = ({ route }: Item) => {
    const [input, setInput] = useState<string | null>(null);
 
-   const { name, _id } = route.params.listDetail;
+   const { _id } = route.params.listDetail;
 
    const [items, setitems] = useState<ItemProp[]>([]);
 
@@ -48,6 +52,12 @@ const List = ({ route }: Item) => {
          update: { items: newItems },
       });
       console.log(updatedTodoName, '### updated');
+   };
+
+   const onDelete = async (todoListId: string, itemId: string) => {
+      setitems((currItems) => currItems.filter((i) => i._id != itemId));
+      const deleteTodo = await deleteCompletedItem(todoListId, itemId);
+      console.log(deleteTodo, 'deleted todo');
    };
 
    const fetchList = async () => {
@@ -86,13 +96,28 @@ const List = ({ route }: Item) => {
                </TouchableOpacity>
             </KeyboardAvoidingView>
             <>
-               <FlatList
+               <SwipeListView
+                  data={items}
+                  renderItem={({ item }) => (
+                     <Item item={item} itemId={item._id} todoListId={_id} />
+                  )}
+                  renderHiddenItem={({ item }) => (
+                     <HiddenItem
+                        itemId={item._id}
+                        todoListId={_id}
+                        onDelete={onDelete}
+                     />
+                  )}
+                  leftOpenValue={75}
+                  rightOpenValue={-75}
+               />
+               {/* <FlatList
                   data={items}
                   renderItem={({ item, index }) => (
                      <Item item={item} itemId={item._id} todoListId={_id} />
                   )}
                   keyExtractor={(item) => item.name}
-               />
+               /> */}
             </>
          </View>
       </View>

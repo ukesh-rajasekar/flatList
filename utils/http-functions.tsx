@@ -134,6 +134,26 @@ const updateCompletedItem = async (todoListId, itemId, update) => {
    }
 };
 
+const deleteCompletedItem = async (todoListId, itemId) => {
+   try {
+      const response = await fetch(
+         `http://10.0.2.2:3006/api/v1/todo/updateItemCompleted/${todoListId}/${itemId}`,
+         {
+            method: 'DELETE',
+            headers: {
+               'Content-Type': 'application/json',
+            },
+         }
+      );
+      const result = await response.json();
+      console.log(result, 'todos-updated');
+      if (result.status === 'success') {
+         return result.status;
+      }
+   } catch (e) {
+      console.log(e, 'error');
+   }
+};
 export {
    getTodos,
    deleteTodo,
@@ -142,4 +162,5 @@ export {
    deleteAllTodo,
    getListById,
    updateCompletedItem,
+   deleteCompletedItem,
 };
