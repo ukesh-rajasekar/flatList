@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import {
    FlatList,
    Keyboard,
@@ -8,47 +9,64 @@ import {
    TouchableOpacity,
    View,
 } from 'react-native';
-import React, { useState } from 'react';
 import tw from 'twrnc';
+import { Item as ItemProp, Lists } from '../types/lists';
+import { getListById, updateTodo } from '../utils/http-functions';
+import { Item } from './items-component';
 
-const Item = ({ idx, item }: { idx: number; item: string }) => {
-   return (
-      <View
-         key={idx}
-         style={tw`my-4 py-2 px-4 flex-row items-center justify-between border-2 border-slate-600 rounded-md bg-slate-700`}
-      >
-         <View style={tw`flex-row items-center flex-wrap`}>
-            <View style={tw`w-4 h-4 bg-white rounded`} />
-            <Text style={tw`ml-4 text-xl text-slate-400`}>{item}</Text>
-         </View>
-         <View style={tw`w-3 h-3 rounded-md border-2 border-white`} />
-      </View>
-   );
+type Item = {
+   route: {
+      params: {
+         listDetail: Lists;
+      };
+   };
 };
 
-const List = () => {
+const List = ({ route }: Item) => {
    const [input, setInput] = useState<string | null>(null);
-   const [name, setname] = useState<string>('list name...');
 
-   const [items, setitems] = useState<string[]>(['one', 'two', 'three']);
+   const { name, _id } = route.params.listDetail;
+
+   const [items, setitems] = useState<ItemProp[]>([]);
 
    const onAdd = () => {
       Keyboard.dismiss();
       if (!input) return;
-      setitems((prev) => [...prev, input]);
+      const newItem = {
+         name: input,
+         isCompleted: false,
+      };
+
+      const newItems = [...items, newItem];
+      setitems(newItems);
       setInput(null);
+      submitUpdate(newItems);
    };
+
+   const submitUpdate = async (newItems: ItemProp[]) => {
+      const updatedTodoName = await updateTodo(_id, {
+         update: { items: newItems },
+      });
+      console.log(updatedTodoName, '### updated');
+   };
+
+   const fetchList = async () => {
+      try {
+         const result = await getListById(_id);
+         setitems(result.items);
+         console.log(result, 'list here');
+      } catch (e) {
+         console.log(e);
+      }
+   };
+
+   useEffect(() => {
+      fetchList();
+   }, []);
 
    return (
       <View style={tw`flex-1 bg-slate-800`}>
          <View style={tw`pt-20 px-10`}>
-            <TextInput
-               style={tw`pl-1 py-2 text-2xl font-medium text-slate-400`}
-               placeholder='list name...'
-               placeholderTextColor={'white'}
-               value={name}
-               onChangeText={(value) => setname(value)}
-            />
             <KeyboardAvoidingView
                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                style={tw`py-4 flex-row items-center justify-around w-full`}
@@ -71,9 +89,9 @@ const List = () => {
                <FlatList
                   data={items}
                   renderItem={({ item, index }) => (
-                     <Item item={item} idx={index} />
+                     <Item item={item} itemId={item._id} todoListId={_id} />
                   )}
-                  keyExtractor={(item) => item}
+                  keyExtractor={(item) => item.name}
                />
             </>
          </View>

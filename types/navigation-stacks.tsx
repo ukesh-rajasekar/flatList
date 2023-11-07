@@ -1,3 +1,4 @@
 export type HomeStackParams = {
-   NewList: {};
+   newlist: {};
+   CreateNewList: {};
 };

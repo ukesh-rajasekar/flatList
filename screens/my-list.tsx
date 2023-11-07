@@ -4,13 +4,19 @@ import {
    KeyboardAvoidingView,
    Platform,
    TouchableOpacity,
+   FlatList,
 } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import tw from 'twrnc';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { HomeStackParams } from '../types/navigation-stacks';
+import { getTodos } from '../utils/http-functions';
+import { List } from '../components/list-component';
+import { Lists } from '../types/lists';
 
 const MyList = () => {
+   const [lists, setlists] = useState<Lists[] | []>([]);
+
    const message = `Let's plan your shopping!`;
    const instruction = `Tap the plus button to create your first list`;
 
@@ -18,19 +24,53 @@ const MyList = () => {
 
    const onAdd = () => {
       //navigate to creation page
-      navigation.navigate('NewList');
+      navigation.navigate('CreateNewList');
    };
+
+   const fetchTodos = async () => {
+      try {
+         const result = await getTodos();
+         setlists(result);
+      } catch (e) {
+         console.log(e);
+      }
+   };
+
+   useEffect(() => {
+      fetchTodos();
+   }, []);
 
    return (
       <View style={tw`flex-1 bg-slate-800`}>
-         <View style={tw`flex items-center justify-center h-full pb-30`}>
-            <Text style={tw`pb-5 text-2xl font-medium text-slate-400`}>
-               {message}
-            </Text>
-            <Text style={tw`pb-4 text-base font-medium text-slate-400`}>
-               {instruction}
-            </Text>
-         </View>
+         {lists.length === 0 ? (
+            <View style={tw`flex items-center justify-center h-full pb-30`}>
+               <Text style={tw`pb-5 text-2xl font-medium text-slate-400`}>
+                  {message}
+               </Text>
+               <Text style={tw`pb-4 text-base font-medium text-slate-400`}>
+                  {instruction}
+               </Text>
+            </View>
+         ) : (
+            <View style={tw`pt-10 px-5`}>
+               <FlatList
+                  data={lists}
+                  renderItem={({ item }) => (
+                     <List
+                        goToList={() => {
+                           navigation.navigate('newlist', {
+                              listDetail: item,
+                           });
+                        }}
+                        item={item}
+                        idx={item._id}
+                     />
+                  )}
+                  keyExtractor={(item) => item._id}
+               />
+            </View>
+         )}
+
          <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={tw`absolute bottom-20 left-20 w-full flex-row justify-around items-center`}
