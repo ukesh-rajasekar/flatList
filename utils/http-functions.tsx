@@ -1,24 +1,30 @@
-const getTodos = async () => {
+const getTodos = async (isDeleted: boolean = false) => {
    try {
-      const response = await fetch('http://10.0.2.2:3006/api/v1/todo/', {
-         method: 'GET',
-         headers: {
-            'Content-Type': 'application/json',
-         },
-      });
+      const response = await fetch(
+         `http://10.0.0.11:3006/api/v1/todo?moveToTrash=${isDeleted}`,
+         {
+            method: 'GET',
+            headers: {
+               'Content-Type': 'application/json',
+            },
+         }
+      );
       const result = await response.json();
       console.log(result, 'todos-fetched');
       if (result.status === 'success') {
          return result.data.todos;
+      } else {
+         return [];
       }
    } catch (e) {
       console.log(e);
+      return [];
    }
 };
 
 const getListById = async (id: string) => {
    try {
-      const response = await fetch(`http://10.0.2.2:3006/api/v1/todo/${id}`, {
+      const response = await fetch(`http://10.0.0.11:3006/api/v1/todo/${id}`, {
          method: 'GET',
          headers: {
             'Content-Type': 'application/json',
@@ -36,7 +42,7 @@ const getListById = async (id: string) => {
 
 const createTodo = async (input) => {
    try {
-      const response = await fetch('http://10.0.2.2:3006/api/v1/todo/', {
+      const response = await fetch('http://10.0.0.11:3006/api/v1/todo/', {
          method: 'POST',
          body: JSON.stringify({ name: input }),
          headers: {
@@ -55,7 +61,7 @@ const createTodo = async (input) => {
 
 const deleteTodo = async (id) => {
    try {
-      const response = await fetch(`http://10.0.2.2:3006/api/v1/todo/${id}`, {
+      const response = await fetch(`http://10.0.0.11:3006/api/v1/todo/${id}`, {
          method: 'DELETE',
          headers: {
             'Content-Type': 'application/json',
@@ -74,7 +80,7 @@ const deleteTodo = async (id) => {
 const deleteAllTodo = async () => {
    try {
       const response = await fetch(
-         `http://10.0.2.2:3006/api/v1/todo/todos/removeAll`,
+         `http://10.0.0.11:3006/api/v1/todo/todos/removeAll`,
          {
             method: 'DELETE',
             headers: {
@@ -95,7 +101,7 @@ const deleteAllTodo = async () => {
 const updateTodo = async (id, update) => {
    console.log(`updating id: ${id} - value: ${JSON.stringify(update)}`);
    try {
-      const response = await fetch(`http://10.0.2.2:3006/api/v1/todo/${id}`, {
+      const response = await fetch(`http://10.0.0.11:3006/api/v1/todo/${id}`, {
          method: 'PUT',
          body: JSON.stringify(update),
          headers: {
@@ -115,7 +121,7 @@ const updateTodo = async (id, update) => {
 const updateCompletedItem = async (todoListId, itemId, update) => {
    try {
       const response = await fetch(
-         `http://10.0.2.2:3006/api/v1/todo/updateItemCompleted/${todoListId}/${itemId}`,
+         `http://10.0.0.11:3006/api/v1/todo/updateItemCompleted/${todoListId}/${itemId}`,
          {
             method: 'PATCH',
             body: JSON.stringify(update),
@@ -137,7 +143,7 @@ const updateCompletedItem = async (todoListId, itemId, update) => {
 const deleteCompletedItem = async (todoListId, itemId) => {
    try {
       const response = await fetch(
-         `http://10.0.2.2:3006/api/v1/todo/updateItemCompleted/${todoListId}/${itemId}`,
+         `http://10.0.0.11:3006/api/v1/todo/updateItemCompleted/${todoListId}/${itemId}`,
          {
             method: 'DELETE',
             headers: {

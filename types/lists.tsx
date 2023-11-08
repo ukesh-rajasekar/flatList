@@ -7,6 +7,7 @@ type Item = {
 type Lists = {
    _id: string;
    name: string;
+   moveToTrash: boolean;
    items: Item[];
 };
 

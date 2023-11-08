@@ -9,6 +9,9 @@ type ListProps = {
    idx: string;
    item: Lists;
    goToList: () => void;
+   icon: string;
+   iconColor: string;
+   onRestore?: (idx) => void;
 };
 
 export const HiddenList = ({
@@ -29,17 +32,31 @@ export const HiddenList = ({
    );
 };
 
-export const List = ({ idx, item, goToList }: ListProps) => {
+export const ListComponent = ({
+   idx,
+   item,
+   goToList,
+   icon,
+   iconColor,
+   onRestore,
+}: ListProps) => {
    return (
-      <TouchableOpacity
+      <TouchableHighlight
          key={idx}
          onPress={goToList}
          style={tw`my-4 py-2 px-4 flex-row items-center justify-between border-2 border-slate-600 rounded-md bg-slate-700`}
       >
-         <View style={tw`flex-row items-center flex-wrap`}>
-            <View style={tw`w-4 h-4 bg-white rounded`} />
-            <Text style={tw`ml-4 text-xl text-slate-400`}>{item.name}</Text>
-         </View>
-      </TouchableOpacity>
+         <>
+            <View style={tw`flex-row items-center flex-wrap`}>
+               <View style={tw`w-4 h-4 bg-white rounded`} />
+               <Text style={tw`ml-4 text-xl text-slate-400`}>{item.name}</Text>
+            </View>
+            <TouchableHighlight
+               onPress={() => (icon === 'restore' ? onRestore(idx) : null)}
+            >
+               <Icon name={icon} size={30} color={iconColor} />
+            </TouchableHighlight>
+         </>
+      </TouchableHighlight>
    );
 };

@@ -1,22 +1,21 @@
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
 import {
-   View,
-   Text,
    KeyboardAvoidingView,
    Platform,
+   Text,
    TouchableOpacity,
-   FlatList,
+   View,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import tw from 'twrnc';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { HomeStackParams } from '../types/navigation-stacks';
-import { getTodos } from '../utils/http-functions';
-import { HiddenList, List } from '../components/list-component';
-import { Lists } from '../types/lists';
 import { SwipeListView } from 'react-native-swipe-list-view';
+import tw from 'twrnc';
+import { HiddenList, ListComponent } from '../components/list-component';
+import { Lists } from '../types/lists';
+import { HomeStackParams } from '../types/navigation-stacks';
+import { getTodos, updateTodo } from '../utils/http-functions';
 
 const MyList = () => {
-   const [lists, setlists] = useState<Lists[] | []>([]);
+   const [lists, setlists] = useState<Lists[]>([]);
 
    const message = `Let's plan your shopping!`;
    const instruction = `Tap the plus button to create your first list`;
@@ -29,17 +28,34 @@ const MyList = () => {
    };
 
    const fetchTodos = async () => {
+      const isOnTrash = false;
       try {
-         const result = await getTodos();
+         const result = await getTodos(isOnTrash);
          setlists(result);
       } catch (e) {
          console.log(e);
       }
    };
 
-   const onDelete = () => {};
+   const onDelete = async (id: string) => {
+      setlists((currItems) => currItems.filter((i) => i._id != id));
+      const updatedTodoName = await updateTodo(id, {
+         update: { moveToTrash: true },
+      });
+      console.log(updatedTodoName, '### updated');
+   };
+
    useEffect(() => {
       fetchTodos();
+
+      const unsubscribe = navigation.addListener('focus', () => {
+         // Do whatever you want
+         fetchTodos();
+      });
+
+      return () => {
+         unsubscribe();
+      };
    }, []);
 
    return (
@@ -58,7 +74,7 @@ const MyList = () => {
                <SwipeListView
                   data={lists}
                   renderItem={({ item }) => (
-                     <List
+                     <ListComponent
                         goToList={() => {
                            navigation.navigate('newlist', {
                               listDetail: item,
@@ -66,6 +82,8 @@ const MyList = () => {
                         }}
                         item={item}
                         idx={item._id}
+                        icon={'chevron-right'}
+                        iconColor={'#94A3B8'}
                      />
                   )}
                   renderHiddenItem={({ item }) => (
