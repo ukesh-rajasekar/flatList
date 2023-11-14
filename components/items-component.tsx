@@ -5,6 +5,7 @@ import { useState } from 'react';
 import Checkbox from 'expo-checkbox';
 import { updateCompletedItem } from '../utils/http-functions';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import React from 'react';
 
 export const HiddenItem = ({
    todoListId,

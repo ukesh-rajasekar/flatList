@@ -4,6 +4,11 @@ type Item = {
    isCompleted: boolean;
 };
 
+type User = {
+   _id: string;
+   name: string;
+   onBoarded: boolean;
+};
 type Lists = {
    _id: string;
    name: string;
@@ -11,4 +16,4 @@ type Lists = {
    items: Item[];
 };
 
-export { Lists, Item };
+export { Lists, Item, User };
