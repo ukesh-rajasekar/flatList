@@ -7,6 +7,7 @@ import { Lists } from '../types/lists';
 import { deleteTodo, getTodos, updateTodo } from '../utils/http-functions';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { HomeStackParams } from '../types/navigation-stacks';
+import { getUser } from '../contexts/userContext';
 
 const Trash = () => {
    const [lists, setlists] = useState<Lists[]>([]);
@@ -14,11 +15,13 @@ const Trash = () => {
    const message = `Looks empty here!`;
    const instruction = ``;
    const navigation = useNavigation<NavigationProp<HomeStackParams>>();
+   const { user } = getUser();
 
    const fetchDeletedTodos = async () => {
+      if (!user) return null;
       const fetchDeleted = true;
       try {
-         const result = await getTodos(fetchDeleted);
+         const result = await getTodos(fetchDeleted, user._id);
          setlists(result);
       } catch (e) {
          console.log(e);

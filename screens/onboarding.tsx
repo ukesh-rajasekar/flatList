@@ -1,3 +1,6 @@
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import LottieView from 'lottie-react-native';
+import React from 'react';
 import {
    Dimensions,
    StyleSheet,
@@ -5,23 +8,19 @@ import {
    TouchableOpacity,
    View,
 } from 'react-native';
-import React from 'react';
 import Onboarding from 'react-native-onboarding-swiper';
 import tw from 'twrnc';
-import LottieView from 'lottie-react-native';
 import { colors } from '../assets/colors';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { setItem } from '../utils/asyncStorage';
-const { width, height } = Dimensions.get('window');
+import { createUser } from '../utils/helpers';
+import { User } from '../types/lists';
+const { width } = Dimensions.get('window');
 
 const OnboardingUser = () => {
    const navigation = useNavigation<NavigationProp<{ Drawer }>>();
-   const user = {
-      onBoarded: true,
-   };
-
    const handleDone = () => {
       navigation.navigate('Drawer');
+      const user: User = createUser();
       setItem('user', JSON.stringify(user));
    };
    const doneButton = ({ ...props }) => {

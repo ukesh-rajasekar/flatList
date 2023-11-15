@@ -13,6 +13,7 @@ import { HiddenList, ListComponent } from '../components/list-component';
 import { Lists } from '../types/lists';
 import { HomeStackParams } from '../types/navigation-stacks';
 import { getTodos, updateTodo } from '../utils/http-functions';
+import { getUser } from '../contexts/userContext';
 
 const MyList = () => {
    const [lists, setlists] = useState<Lists[]>([]);
@@ -22,15 +23,19 @@ const MyList = () => {
 
    const navigation = useNavigation<NavigationProp<HomeStackParams>>();
 
+   const { user } = getUser();
+
+   console.log(user);
    const onAdd = () => {
       //navigate to creation page
       navigation.navigate('CreateNewList');
    };
 
    const fetchTodos = async () => {
+      if (!user) return null;
       const isOnTrash = false;
       try {
-         const result = await getTodos(isOnTrash);
+         const result = await getTodos(isOnTrash, user._id);
          setlists(result);
       } catch (e) {
          console.log(e);
@@ -56,8 +61,9 @@ const MyList = () => {
       return () => {
          unsubscribe();
       };
-   }, []);
+   }, [user]);
 
+   console.log(lists);
    return (
       <View style={tw`flex-1 bg-slate-800`}>
          {lists.length === 0 ? (

@@ -9,6 +9,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import tw from 'twrnc';
 import { HomeStackParams } from '../types/navigation-stacks';
 import { createTodo } from '../utils/http-functions';
+import { getItem } from '../utils/asyncStorage';
+import { User } from '../types/lists';
 
 const CreateListScreen = () => {
    const [name, setname] = useState<string>('');
@@ -21,7 +23,9 @@ const CreateListScreen = () => {
       setloading(true);
       let result;
       try {
-         result = await createTodo(name);
+         let user: User | string = await getItem('user');
+         user = JSON.parse(user) as User;
+         result = await createTodo(name, user);
          console.log(result, 'result here');
          if (!result.name) {
             Alert.alert('Something went wrong, try again! ');

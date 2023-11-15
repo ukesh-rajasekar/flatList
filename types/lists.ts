@@ -8,6 +8,7 @@ type User = {
    _id: string;
    name: string;
    onBoarded: boolean;
+   isOwner: boolean;
 };
 type Lists = {
    _id: string;

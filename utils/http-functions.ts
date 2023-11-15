@@ -1,7 +1,9 @@
-const getTodos = async (isDeleted: boolean = false) => {
+import { User } from "../types/lists";
+
+const getTodos = async (isDeleted: boolean = false, id: string) => {
    try {
       const response = await fetch(
-         `http://10.0.0.11:3006/api/v1/todo?moveToTrash=${isDeleted}`,
+         `http://10.0.0.11:3006/api/v1/todo/todos/${id}/?moveToTrash=${isDeleted}`,
          {
             method: 'GET',
             headers: {
@@ -40,11 +42,11 @@ const getListById = async (id: string) => {
    }
 };
 
-const createTodo = async (input) => {
+const createTodo = async (input: string, user: User) => {
    try {
       const response = await fetch('http://10.0.0.11:3006/api/v1/todo/', {
          method: 'POST',
-         body: JSON.stringify({ name: input }),
+         body: JSON.stringify({ name: input, users: [user] }),
          headers: {
             'Content-Type': 'application/json',
          },
