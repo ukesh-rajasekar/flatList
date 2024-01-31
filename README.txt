@@ -15,3 +15,6 @@ A list/notes react native app which you can share with your friends and family (
 -  Accept / Deny requests~
 -  Appearances page~
 -  Tell a friend feature~
+
+## Resume at
+Think about how share and collab on a list
